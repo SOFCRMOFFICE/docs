@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript Complete Guide — Basics to Advanced</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121935;
+      --panel-soft: #1a2450;
+      --text: #e6ecff;
+      --muted: #a7b1d9;
+      --accent: #6ee7ff;
+      --accent-2: #8b5cf6;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border: #2a376a;
+      --code: #0f1733;
+      --shadow: 0 12px 30px rgba(0, 0, 0, .35);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top right, #1a1f4d 0%, var(--bg) 45%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      scroll-behavior: smooth;
+    }
+
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(var(--accent-2), var(--accent)); border-radius: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0f21; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      border-right: 1px solid var(--border);
+      background: rgba(11, 16, 32, 0.86);
+      backdrop-filter: blur(10px);
+      padding: 1.2rem;
+      overflow-y: auto;
+    }
+
+    .brand {
+      margin: 0 0 .8rem;
+      font-size: 1.2rem;
+      letter-spacing: .4px;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+
+    .brand .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 18px var(--accent);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: .92rem;
+      margin-bottom: 1rem;
+      line-height: 1.45;
+    }
+
+    .nav {
+      display: grid;
+      gap: .35rem;
+      margin-top: 1rem;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: .55rem .7rem;
+      transition: all .2s ease;
+      font-size: .92rem;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      color: var(--text);
+      border-color: var(--border);
+      background: linear-gradient(90deg, rgba(139,92,246,.18), rgba(110,231,255,.10));
+      transform: translateX(2px);
+    }
+
+    .main {
+      padding: 2rem clamp(1rem, 3vw, 3rem) 4rem;
+      max-width: 1200px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(110,231,255,.16), rgba(139,92,246,.16));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.6rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+    }
+
+    .hero p {
+      margin: .8rem 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 80ch;
+    }
+
+    .chips {
+      margin-top: 1rem;
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      padding: .3rem .6rem;
+      border-radius: 999px;
+      font-size: .76rem;
+      color: var(--muted);
+    }
+
+    section {
+      margin-top: 1.1rem;
+      background: rgba(18, 25, 53, .85);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.2rem;
+      box-shadow: var(--shadow);
+    }
+
+    section h2 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    section h3 {
+      margin: 1rem 0 .45rem;
+      font-size: 1.04rem;
+      color: #cfd7ff;
+    }
+
+    .intro {
+      color: var(--muted);
+      line-height: 1.65;
+      margin-top: .45rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      gap: .9rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: var(--panel-soft);
+      border-radius: 12px;
+      padding: .9rem;
+    }
+
+    .card p {
+      margin: .4rem 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: .95rem;
+    }
+
+    pre {
+      margin: .6rem 0 0;
+      padding: .9rem;
+      border-radius: 10px;
+      background: var(--code);
+      border: 1px solid #2b386d;
+      overflow: auto;
+      color: #dbe8ff;
+      line-height: 1.5;
+      font-size: .9rem;
+    }
+
+    code { font-family: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+    .tabs {
+      margin-top: .8rem;
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: #16214c;
+      color: #dce5ff;
+      padding: .4rem .7rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: .84rem;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(139,92,246,.45), rgba(110,231,255,.25));
+      border-color: #6c85ff;
+    }
+
+    .tab-panel { display: none; margin-top: .65rem; }
+    .tab-panel.active { display: block; }
+
+    .run-box {
+      margin-top: .7rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .run-box textarea {
+      width: 100%;
+      min-height: 120px;
+      border: 0;
+      resize: vertical;
+      background: #0f1735;
+      color: #dbe8ff;
+      padding: .8rem;
+      font-family: "Fira Code", monospace;
+      font-size: .88rem;
+    }
+
+    .run-controls {
+      display: flex;
+      gap: .6rem;
+      padding: .6rem;
+      border-top: 1px solid var(--border);
+      background: #111b40;
+      align-items: center;
+    }
+
+    .btn {
+      border: 1px solid #4b61b8;
+      background: linear-gradient(135deg, #4758d8, #2ba9d6);
+      color: white;
+      border-radius: 8px;
+      padding: .38rem .65rem;
+      cursor: pointer;
+      font-size: .83rem;
+    }
+
+    .output {
+      margin-top: .4rem;
+      padding: .6rem;
+      border-radius: 8px;
+      border: 1px dashed #3c4f95;
+      background: #0a1130;
+      font-family: monospace;
+      color: #b8d8ff;
+      min-height: 2rem;
+      white-space: pre-wrap;
+    }
+
+    .glossary {
+      display: grid;
+      gap: .7rem;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    }
+
+    .term {
+      border: 1px solid var(--border);
+      background: #121b43;
+      border-radius: 12px;
+      padding: .8rem;
+    }
+
+    .term b { color: #dff7ff; }
+    .term p { color: var(--muted); margin: .4rem 0 0; font-size: .92rem; }
+
+    .floating-cursor {
+      position: fixed;
+      pointer-events: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(110,231,255,.8);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: transform .03s linear;
+      z-index: 1000;
+      mix-blend-mode: screen;
+    }
+
+    .footer-note {
+      margin-top: 1rem;
+      color: #95a5d8;
+      font-size: .9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-cursor" id="cursor"></div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h2 class="brand"><span class="dot"></span> JavaScript Master Guide</h2>
+      <div class="subtitle">From beginner to advanced with practical, real-life examples and interactive snippets.</div>
+      <nav class="nav" id="sideNav">
+        <a href="#overview">Overview</a>
+        <a href="#basics">Basics</a>
+        <a href="#variables">Variables & Types</a>
+        <a href="#functions">Functions & Scope</a>
+        <a href="#objects">Objects & Arrays</a>
+        <a href="#dom">DOM & Events</a>
+        <a href="#async">Async JavaScript</a>
+        <a href="#es6">ES6+ Features</a>
+        <a href="#advanced">Advanced Concepts</a>
+        <a href="#glossary">Glossary</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="hero" id="overview">
+        <h1>JavaScript — Complete Learning Path 🚀</h1>
+        <p>
+          This guide is structured like a professional learning roadmap: modern dark UI, clean sections, quick tabs,
+          practical examples, and mini interactive demos. Use it as a reference for interviews, projects, and daily frontend/backend JS work.
+        </p>
+        <div class="chips">
+          <span class="chip">Beginner → Advanced</span>
+          <span class="chip">Real-world examples</span>
+          <span class="chip">Async + DOM + OOP + Functional</span>
+          <span class="chip">Glossary included</span>
+        </div>
+      </header>
+
+      <section id="basics">
+        <h2>1) JavaScript Basics</h2>
+        <p class="intro">JavaScript is a high-level, interpreted language used for web apps, servers (Node.js), mobile apps, automation, and more.</p>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Hello JavaScript</h3>
+            <pre><code>// Runs in browser console
+console.log("Hello, JavaScript!");</code></pre>
+            <p>Use the browser DevTools console to test quick snippets while learning.</p>
+          </article>
+          <article class="card">
+            <h3>Where JS Runs</h3>
+            <p>Browser, Node.js runtime, serverless functions, desktop apps (Electron), and scripting environments.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="variables">
+        <h2>2) Variables & Data Types</h2>
+        <p class="intro">Use <code>let</code> for mutable values, <code>const</code> for fixed references, and avoid <code>var</code> in modern code.</p>
+        <pre><code>const appName = "Shoply";
+let cartCount = 0;
+cartCount += 1;
+
+const isLoggedIn = true;
+const price = 499.99;
+const tags = ["sale", "new"];
+const user = { name: "Aman", role: "admin" };</code></pre>
+        <h3>Real-life Example: E-commerce Pricing</h3>
+        <pre><code>const basePrice = 1200;
+const taxRate = 0.18;
+const discount = 200;
+
+const finalPrice = basePrice + basePrice * taxRate - discount;
+console.log(`Payable amount: ₹${finalPrice}`);</code></pre>
+      </section>
+
+      <section id="functions">
+        <h2>3) Functions, Scope, Hoisting & Closures</h2>
+        <div class="tabs" data-tabs>
+          <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="f1">Function Types</button>
+            <button class="tab-btn" data-tab="f2">Scope & Hoisting</button>
+            <button class="tab-btn" data-tab="f3">Closure Example</button>
+          </div>
+
+          <div class="tab-panel active" data-panel="f1">
+            <pre><code>// Function declaration
+function add(a, b) { return a + b; }
+
+// Function expression
+const multiply = function(a, b) { return a * b; };
+
+// Arrow function
+const square = n => n * n;</code></pre>
+          </div>
+
+          <div class="tab-panel" data-panel="f2">
+            <pre><code>{
+  let city = "Delhi";   // block scope
+  const pin = 110001;    // block scope
+}
+
+// var is function-scoped and hoisted (avoid in modern JS)
+console.log(counter); // undefined due to hoisting
+var counter = 5;</code></pre>
+          </div>
+
+          <div class="tab-panel" data-panel="f3">
+            <pre><code>// Closure retains access to outer variables
+function createCounter() {
+  let count = 0;
+  return function() {
+    count++;
+    return count;
+  };
+}
+
+const next = createCounter();
+console.log(next()); // 1
+console.log(next()); // 2</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="objects">
+        <h2>4) Objects & Arrays</h2>
+        <h3>Object Use Case: User Profile</h3>
+        <pre><code>const user = {
+  id: 101,
+  name: "Riya",
+  isPremium: true,
+  greet() {
+    return `Welcome, ${this.name}`;
+  }
+};
+
+console.log(user.greet());</code></pre>
+
+        <h3>Array Use Case: Order Calculations</h3>
+        <pre><code>const orders = [500, 1200, 300, 700];
+const total = orders.reduce((sum, value) => sum + value, 0);
+const bigOrders = orders.filter(x => x >= 700);
+
+console.log(total);      // 2700
+console.log(bigOrders);  // [1200, 700]</code></pre>
+      </section>
+
+      <section id="dom">
+        <h2>5) DOM Manipulation & Events</h2>
+        <p class="intro">DOM lets JavaScript interact with HTML to build dynamic UI.</p>
+        <pre><code>&lt;button id="themeBtn"&gt;Toggle Theme&lt;/button&gt;
+&lt;p id="status"&gt;Current: Dark&lt;/p&gt;
+
+const btn = document.getElementById("themeBtn");
+const status = document.getElementById("status");
+
+btn.addEventListener("click", () =&gt; {
+  document.body.classList.toggle("light");
+  status.textContent = document.body.classList.contains("light")
+    ? "Current: Light"
+    : "Current: Dark";
+});</code></pre>
+
+        <div class="card">
+          <h3>Mini Interactive Runner (safe expression style)</h3>
+          <p>Try simple JS lines (math, string, array methods). Output appears below.</p>
+          <div class="run-box">
+            <textarea id="runnerInput">[1,2,3,4].map(n => n * 2)</textarea>
+            <div class="run-controls">
+              <button class="btn" id="runBtn">Run</button>
+              <small style="color:var(--muted)">Tip: return any expression</small>
+            </div>
+          </div>
+          <div class="output" id="runnerOutput">Output will appear here...</div>
+        </div>
+      </section>
+
+      <section id="async">
+        <h2>6) Async JavaScript (Callbacks → Promises → Async/Await)</h2>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Promises</h3>
+            <pre><code>function fetchUser() {
+  return new Promise(resolve => {
+    setTimeout(() => resolve({ id: 1, name: "Aarav" }), 1000);
+  });
+}</code></pre>
+          </article>
+          <article class="card">
+            <h3>Async/Await (real API call)</h3>
+            <pre><code>async function loadPosts() {
+  try {
+    const res = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=2");
+    const posts = await res.json();
+    console.log(posts);
+  } catch (err) {
+    console.error("Failed to fetch posts", err);
+  }
+}</code></pre>
+          </article>
+        </div>
+      </section>
+
+      <section id="es6">
+        <h2>7) ES6+ Features You Use Daily</h2>
+        <pre><code>// Destructuring
+const { name, role } = { name: "Nikhil", role: "developer" };
+
+// Spread
+const a = [1,2];
+const b = [...a, 3,4];
+
+// Rest params
+function sum(...nums) {
+  return nums.reduce((x, y) => x + y, 0);
+}
+
+// Template literals
+const msg = `Hi ${name}, role is ${role}`;</code></pre>
+
+        <h3>Modules</h3>
+        <pre><code>// math.js
+export const add = (a,b) => a+b;
+
+// app.js
+import { add } from "./math.js";
+console.log(add(2,3));</code></pre>
+      </section>
+
+      <section id="advanced">
+        <h2>8) Advanced Concepts</h2>
+        <div class="tabs" data-tabs>
+          <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="a1">this & bind</button>
+            <button class="tab-btn" data-tab="a2">Prototype Chain</button>
+            <button class="tab-btn" data-tab="a3">Functional Patterns</button>
+            <button class="tab-btn" data-tab="a4">Event Loop</button>
+          </div>
+
+          <div class="tab-panel active" data-panel="a1">
+            <pre><code>const team = {
+  name: "Core JS",
+  show() {
+    console.log(this.name);
+  }
+};
+
+const detached = team.show;
+detached(); // undefined in strict mode
+const fixed = detached.bind(team);
+fixed();    // Core JS</code></pre>
+          </div>
+
+          <div class="tab-panel" data-panel="a2">
+            <pre><code>const animal = { eats: true };
+const dog = Object.create(animal);
+dog.barks = true;
+
+console.log(dog.eats);  // inherited via prototype chain</code></pre>
+          </div>
+
+          <div class="tab-panel" data-panel="a3">
+            <pre><code>// Currying
+const multiply = a => b => a * b;
+const double = multiply(2);
+console.log(double(10)); // 20
+
+// Memoization
+function memoize(fn) {
+  const cache = {};
+  return (...args) => {
+    const key = JSON.stringify(args);
+    if (cache[key]) return cache[key];
+    cache[key] = fn(...args);
+    return cache[key];
+  };
+}</code></pre>
+          </div>
+
+          <div class="tab-panel" data-panel="a4">
+            <pre><code>console.log("Start");
+setTimeout(() => console.log("Timeout"), 0);
+Promise.resolve().then(() => console.log("Promise"));
+console.log("End");
+
+// Output:
+// Start
+// End
+// Promise
+// Timeout</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="glossary">
+        <h2>9) Glossary</h2>
+        <div class="glossary">
+          <div class="term"><b>Closure</b><p>A function with access to variables from its lexical scope even after the outer function returns.</p></div>
+          <div class="term"><b>Hoisting</b><p>JavaScript moves declarations to top of scope during compilation phase.</p></div>
+          <div class="term"><b>Promise</b><p>An object representing eventual completion/failure of async work.</p></div>
+          <div class="term"><b>Event Loop</b><p>Mechanism that manages execution stack, callback queue, and microtasks.</p></div>
+          <div class="term"><b>Prototype</b><p>Object from which another object inherits properties and methods.</p></div>
+          <div class="term"><b>Destructuring</b><p>Syntax to extract values from arrays/objects into variables.</p></div>
+          <div class="term"><b>Pure Function</b><p>Function with no side effects and same output for same input.</p></div>
+          <div class="term"><b>Debouncing</b><p>Technique to limit function execution rate by delaying invocation.</p></div>
+        </div>
+        <p class="footer-note">Practice tip: Build mini projects (todo app, weather app, quiz app, expense tracker) to reinforce these concepts quickly.</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Sidebar active link tracking
+    const links = [...document.querySelectorAll('#sideNav a')];
+    const sections = links.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          links.forEach(l => l.classList.remove('active'));
+          const active = links.find(l => l.getAttribute('href') === `#${entry.target.id}`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { threshold: 0.45 });
+
+    sections.forEach(section => observer.observe(section));
+
+    // Tab system
+    document.querySelectorAll('[data-tabs]').forEach(tabRoot => {
+      const buttons = tabRoot.querySelectorAll('.tab-btn');
+      const panels = tabRoot.querySelectorAll('.tab-panel');
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.tab;
+          buttons.forEach(b => b.classList.remove('active'));
+          panels.forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          const panel = tabRoot.querySelector(`[data-panel="${target}"]`);
+          if (panel) panel.classList.add('active');
+        });
+      });
+    });
+
+    // Mini runner (expression-based)
+    const runnerInput = document.getElementById('runnerInput');
+    const runnerOutput = document.getElementById('runnerOutput');
+    document.getElementById('runBtn').addEventListener('click', () => {
+      try {
+        const value = Function(`"use strict"; return (${runnerInput.value})`)();
+        runnerOutput.textContent = typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value);
+      } catch (error) {
+        runnerOutput.textContent = `Error: ${error.message}`;
+      }
+    });
+
+    // Simple cursor effect
+    const cursor = document.getElementById('cursor');
+    window.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  </script>
+</body>
+</html>
